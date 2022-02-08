@@ -65,31 +65,6 @@ RSpec.describe User, type: :model do
         expect(@test_user.errors.full_messages).to include("Password is too short (minimum is 8 characters)")
       end
       
-      it "invalid when email exists" do
-        @new_user = User.create(
-          name:                  "Test2",
-          last_name:             "User2",
-          email:                 "test@test.com",
-          password:              "password",
-          password_confirmation: "password"
-          )
-          expect(@new_user).to be_invalid
-          # puts @new_user.errors.full_messages()
-          expect(@new_user.errors.full_messages).to include("Email has already been taken")
-      end
-        
-      it "invalid when email exists in different cases" do
-        @new_user = User.create(
-          name:                  "Test3",
-          last_name:             "User3",
-          email:                 "TEST@TEST.COM",
-          password:              "password",
-          password_confirmation: "password"
-          )
-          expect(@new_user).to be_invalid
-          # puts @new_user.errors.full_messages()
-          expect(@new_user.errors.full_messages).to include("Email has already been taken")
-      end
   end
         
   describe '.authenticate_with_credentials' do
@@ -102,13 +77,72 @@ RSpec.describe User, type: :model do
           password:              "password",
           password_confirmation: "password"
         )
-          
-          
+      @test_user.save    
+      
     end
 
-    it " " do
-
+    it "invalid when email exists" do
+      @new_user = User.create(
+        name:                  "Test2",
+        last_name:             "User2",
+        email:                 "test@test.com",
+        password:              "password",
+        password_confirmation: "password"
+        )
+        expect(@new_user).to be_invalid
+        # puts @new_user.errors.full_messages()
+        expect(@new_user.errors.full_messages).to include("Email has already been taken")
     end
+      
+    it "invalid when email exists in different cases" do
+      @new_user = User.create(
+        name:                  "Test3",
+        last_name:             "User3",
+        email:                 "TEST@TEST.COM",
+        password:              "password",
+        password_confirmation: "password"
+        )
+        expect(@new_user).to be_invalid
+        # puts @new_user.errors.full_messages()
+        expect(@new_user.errors.full_messages).to include("Email has already been taken")
+    end
+
+    it "return a user with valid password and case insensitive email with leading spaces" do
+      User.new(
+        name:            "Test",
+        last_name:             "User",
+        email:                 "test@test.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+      user = User.authenticate_with_credentials("   TEsT@TEST.CoM", "password")
+      expect(user.email).to eq("test@test.com")
+    end
+
+    it "return a user with valid password and case insensitive email with trailing spaces" do
+      User.new(
+        name:            "Test",
+        last_name:             "User",
+        email:                 "test@test.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+      user = User.authenticate_with_credentials("TEST@TESt.cOM   ", "password")
+      expect(user.email).to eq("test@test.com")
+    end
+
+    it "return a user with valid password and case insensitive email with leading and trailing spaces" do
+      User.new(
+        name:                  "Test",
+        last_name:             "User",
+        email:                 "test@test.com",
+        password:              "password",
+        password_confirmation: "password"
+      ).save
+      user = User.authenticate_with_credentials("  tESt@TEST.COm   ", "password")
+      expect(user.email).to eq("test@test.com")
+    end
+
   end
         
 end
