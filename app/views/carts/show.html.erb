@@ -44,7 +44,7 @@
           data-name="Jungle"
           data-description="Khurram Virani's Jungle Order"
           data-locale="auto"
-          data-email="<%= current_user.email %>"
+          data-email="<%= current_user ? current_user.email : "welcome@email.com" %>"
           data-currency="cad">
         </script>
       <% end %>
