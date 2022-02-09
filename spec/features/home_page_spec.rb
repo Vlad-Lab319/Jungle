@@ -1,5 +1,5 @@
 require 'rails_helper'
-require "capybara/rails"
+# require "capybara/rails"
 
 
 RSpec.feature "Visitor navigates to home page", type: :feature, js: true do
