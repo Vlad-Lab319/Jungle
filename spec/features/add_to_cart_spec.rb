@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature "Visitor navigates to home page", type: :feature, js: true do
+RSpec.feature "Visitor navigates to home page", type: :feature, js: false do
 
    # SETUP
    before :each do
@@ -24,7 +24,7 @@ RSpec.feature "Visitor navigates to home page", type: :feature, js: true do
       expect(page).to have_content("My Cart (1)")
     end
 
-    save_screenshot
+    # save_screenshot
   end
 
 end
